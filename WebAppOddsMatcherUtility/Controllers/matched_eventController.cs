@@ -61,7 +61,7 @@ namespace WebAppOddsMatcherUtility.Controllers
 
             var matched = (from s in db.matched_event
                            orderby s.rating descending
-                           select s).Take(3000);
+                           select s).Take(6000);
 
             //
             // Filter
