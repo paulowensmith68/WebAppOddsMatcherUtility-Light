@@ -28,38 +28,37 @@
                     <input type="text" class="form-control" id="stake_amount_val" name="stake_amount_val" aria-describedby="stake_amount" onkeyup="ODDS_NS.inlineCalculate();" placeholder="10.00" pattern="^\d*(\.\d{2}$)?">
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3 text-center" style="margin-bottom: 10px;">
+            @*<div class="col-sm-6 col-md-3 text-center" style="margin-bottom: 10px;">
                 <div class="input-group input-group-sm">
                     <span class="input-group-addon" id="exchange_balance">Exchange Balance =</span>
                     <input type="text" class="form-control" id="exchange_balance_val" name="exchange_balance_val" aria-describedby="exchange_balance">
                 </div>
-            </div>
+            </div>*@
         </div>
         <div class="row m-t-10">
             <div class="col-md-6">
                 <div class="input-group input-group-sm">
                     <!-- (with a at on the front) onchange="ODDS_NS.submitOldFilterForm(this);" -->
-                    <span class="old-filters">@Html.DropDownList("SearchByBookmaker", null, "All bookmakers", new { @class = "form-control input-sm" })</span>
-                    <span class="old-filters">@Html.DropDownList("SearchByMarketType", null, "All markets", new { @class = "form-control input-sm" })</span>
-                    <span class="old-filters">@Html.DropDownList("SearchByBack", null, "All back bets", new { @class = "form-control input-sm" })</span>
-                    <span class="old-filters">@Html.DropDownList("SearchBySize", null, "All sizes", new { @class = "form-control input-sm" })</span>
-
+                    <span class="old-filters">@Html.DropDownList("SearchByBookmaker", null, "All bookmakers", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })</span>
+                    <span class="old-filters">@Html.DropDownList("SearchByMarketType", null, "All markets", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })</span>
+                    <span class="old-filters">@Html.DropDownList("SearchByBack", null, "All back bets", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })</span>
+                    <span class="old-filters">@Html.DropDownList("SearchBySize", null, "All sizes", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })</span>
                 </div>
             </div>
             <div class="col-md-3">
-                <div id="show_selector_group" class="btn-group btn-group-sm" role="group" aria-label="show type" data-toggle="buttons">
+                @*<div id="show_selector_group" class="btn-group btn-group-sm" role="group" aria-label="show type" data-toggle="buttons">
                     <label class="btn btn-default active"><input type="radio" id="bt_show_arbs" name="show_selector" checked> Show Arbs 100+</label>
                     <label class="btn btn-default"><input type="radio" id="bt_show_availability" name="show_selector"> Show Availability Only</label>
-                </div>
+                </div>*@
             </div>
             <div class="col-md-3">
                 <button type="button" class="btn btn-danger btn-sm pull-right m-l-10" onclick="ODDS.refreshPage()"><span class="fa fa-refresh"></span> Refresh</button>
-                <button type="button" class="btn btn-success btn-sm pull-right" data-toggle="collapse" data-target="#filters_section"><span class="fa fa-filter"></span> Filters</button>
+                @*<button type="button" class="btn btn-success btn-sm pull-right" data-toggle="collapse" data-target="#filters_section"><span class="fa fa-filter"></span> Filters</button>*@
             </div>
         </div>
     </div>
 
-    <div id="filters_section" class="collapse m-b-10">
+    @*<div id="filters_section" class="collapse m-b-10">
         <div class="row">
             <div class="col-sm-6 col-md-2">
                 <div class="panel panel-default m-t-10 m-b-10">
@@ -345,7 +344,7 @@
                 </div>
             </div>
         </div>
-    </div> <!-- /#filters_section -->
+    </div> <!-- /#filters_section -->*@
 
 } <!-- end of form -->
 
