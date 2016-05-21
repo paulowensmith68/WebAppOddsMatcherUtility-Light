@@ -1,0 +1,101 @@
+﻿/* style the table headings (yellow background) */
+table > thead > tr > th {
+    background: #effea5;
+}
+
+/* padding around GBP symbol in button */
+button.profit-btn > span {
+    padding: 2px;
+}
+
+/* blue background around the Back column values */
+table > tbody > tr > td > div > span.back-highlight {
+    background-color:#d7ecfa !important;
+    color:#404040;
+    border-radius: 5px;
+    padding: 2px; 
+    width: 100%;
+    display: inline-block;
+    text-align: center !important;
+}
+
+/* pink background around the lay column values */
+table > tbody > tr > td > div > span.lay-highlight {
+    background-color: #fddee5 !important;
+    color: #404040;
+    border-radius: 5px;
+    padding: 2px;
+    width: 100%;
+    display: inline-block;
+    text-align: center !important;
+}
+
+/* white text on black background */
+.white-on-black {
+    color: white; 
+    background-color : #000000;
+}
+
+/* background colours */
+.bg-light-blue {
+    background-color: #D7ECFA;
+}
+
+.bg-pink {
+    background-color: #FDDEE5;
+}
+
+.split-hcell{ border-bottom: 2px dotted #ddd; }
+.split-cell-top{ border-bottom: 2px dotted #ddd; min-height: 35px; min-width: 75px }
+.split-cell-bottom{ min-height: 35px; min-width: 75px}
+.split-cell-top-sm{ border-bottom: 2px dotted #ddd; min-height: 35px; }
+.split-cell-bottom-sm{ min-height: 35px; }
+.fixed-cell{ width: 100px; height: 90px; }
+.liability-highlight { border: 1px solid red; background-color: #FDDEE5; border-radius: 2px; height: 100%; width: 100%; padding-top:24px; }
+.availability-highlight { border: 1px solid green; background-color: #90EB90; border-radius: 2px; height: 100%; width: 100%; padding-top:24px; }
+
+
+/* custom shortcuts for common padding and margins */
+.p-t-5 { padding-top: 5px !important;}
+.p-l-5 { padding-left: 5px !important; }
+.p-r-5 { padding-right: 5px !important; }
+.p-b-5 { padding-top: 5px !important; }
+.p-t-10 { padding-top: 10px !important; }
+.p-l-10 { padding-left: 10px !important; }
+.p-r-10 { padding-right: 10px !important; }
+.p-b-10 { padding-bottom: 10px !important; }
+.p-t-20 { padding-top: 20px; }
+.p-l-20 { padding-left: 20px; }
+.p-r-20 { padding-right: 20px; }
+.p-b-20 { padding-bottom: 20px; }
+.p-t-30 { padding-top: 30px; }
+.p-l-30 { padding-left: 30px; }
+.p-r-30 { padding-right: 30px; }
+.p-b-30 { padding-bottom: 30px; }
+.p-t-40 { padding-top: 40px; }
+.p-l-40 { padding-left: 40px; }
+.p-r-40 { padding-right: 40px; }
+.p-b-40 { padding-bottom: 40px; }
+
+.m-t-10 { margin-top: 10px; }
+.m-l-10 { margin-left: 10px; }
+.m-r-10 { margin-right: 10px; }
+.m-b-10 { margin-bottom: 10px; }
+.m-t-20 { margin-top: 20px; }
+.m-l-20 { margin-left: 20px; }
+.m-r-20 { margin-right: 20px; }
+.m-b-20 { margin-bottom: 20px; }
+
+/* filters section */
+#filters_section { border: 1px solid #ddd; border-radius: 4px; padding:5px; background-color: #dedede;}
+.panel-body { padding:0px; height: 250px; overflow:auto;}
+.panel-heading { padding: 1px 10px; }
+.list-group-item {padding: 0 10px !important; border-left:none !important; border-right:none !important} /* override bootstrap defaults */
+.list-group-item:first-child { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important;} /* override bootstrap defaults */
+.list-group-item:last-child { border-bottom-left-radius: 0 !important; border-bottom-right-radius: 0 !important;} /* override bootstrap defaults */
+.list-group-item:hover, a.list-group-item:focus { text-decoration: none; background-color: rgb(245, 245, 245); }
+.list-group { margin-bottom:0px; }
+
+/* controls section */
+#control_area{ border: 1px solid #ddd; border-radius: 4px; padding:5px; background-color: #dedede; margin-bottom: 10px; }
+.old-filters{ display: inline-block; padding-right: 10px; }

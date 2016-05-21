@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="oddsmatchingModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="matched_event">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="eventDate" Type="datetime" Precision="0" />
+          <Property Name="sport" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="details" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="betName" Type="varchar" MaxLength="150" />
+          <Property Name="marketName" Type="varchar" MaxLength="50" />
+          <Property Name="rating" Type="double" />
+          <Property Name="info" Type="varchar" MaxLength="250" />
+          <Property Name="bookmaker" Type="varchar" MaxLength="250" />
+          <Property Name="bookmaker_name" Type="varchar" MaxLength="500" />
+          <Property Name="bookmaker_affiliate_link" Type="varchar" MaxLength="255" />
+          <Property Name="back" Type="double" />
+          <Property Name="exchange" Type="varchar" MaxLength="250" />
+          <Property Name="lay" Type="double" />
+          <Property Name="size" Type="double" />
+          <Property Name="betfairEventTypeId" Type="int" Nullable="false" />
+          <Property Name="betfairMarketTypeCode" Type="varchar" MaxLength="50" />
+          <Property Name="competitionName" Type="varchar" MaxLength="250" />
+          <Property Name="countryCode" Type="varchar" MaxLength="2" />
+          <Property Name="timezone" Type="varchar" MaxLength="150" />
+          <Property Name="n" Type="uint" Nullable="false" />
+          <Property Name="ut" Type="timestamp" Precision="0" Nullable="false" />
+          <Property Name="del" Type="enum" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="oddsmatchingModelStoreContainer">
+          <!--<EntitySet Name="matched_event" EntityType="Self.matched_event" Schema="oddsp1" store:Type="Tables" />-->
+          <EntitySet Name="matched_event" EntityType="Self.matched_event" Schema="oddsmatching" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="oddsmatchingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="matched_event">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="eventDate" Type="DateTime" />
+          <Property Name="sport" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="details" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="betName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="marketName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="rating" Type="Double" />
+          <Property Name="info" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="bookmaker" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="back" Type="Double" />
+          <Property Name="exchange" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="lay" Type="Double" />
+          <Property Name="size" Type="Double" />
+          <Property Name="betfairEventTypeId" Type="Int32" Nullable="false" />
+          <Property Name="betfairMarketTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="competitionName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="countryCode" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+          <Property Name="timezone" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="n" Type="Int64" Nullable="false" />
+          <Property Name="ut" Type="DateTime" Nullable="false" />
+          <Property Name="del" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="bookmaker_name" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="bookmaker_affiliate_link" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="oddsmatchingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="matched_event" EntityType="Self.matched_event" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="oddsmatchingModelStoreContainer" CdmEntityContainer="oddsmatchingEntities">
+          <EntitySetMapping Name="matched_event">
+            <EntityTypeMapping TypeName="oddsmatchingModel.matched_event">
+              <MappingFragment StoreEntitySet="matched_event">
+                <ScalarProperty Name="bookmaker_affiliate_link" ColumnName="bookmaker_affiliate_link" />
+                <ScalarProperty Name="bookmaker_name" ColumnName="bookmaker_name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="eventDate" ColumnName="eventDate" />
+                <ScalarProperty Name="sport" ColumnName="sport" />
+                <ScalarProperty Name="details" ColumnName="details" />
+                <ScalarProperty Name="betName" ColumnName="betName" />
+                <ScalarProperty Name="marketName" ColumnName="marketName" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="info" ColumnName="info" />
+                <ScalarProperty Name="bookmaker" ColumnName="bookmaker" />
+                <ScalarProperty Name="back" ColumnName="back" />
+                <ScalarProperty Name="exchange" ColumnName="exchange" />
+                <ScalarProperty Name="lay" ColumnName="lay" />
+                <ScalarProperty Name="size" ColumnName="size" />
+                <ScalarProperty Name="betfairEventTypeId" ColumnName="betfairEventTypeId" />
+                <ScalarProperty Name="betfairMarketTypeCode" ColumnName="betfairMarketTypeCode" />
+                <ScalarProperty Name="competitionName" ColumnName="competitionName" />
+                <ScalarProperty Name="countryCode" ColumnName="countryCode" />
+                <ScalarProperty Name="timezone" ColumnName="timezone" />
+                <ScalarProperty Name="n" ColumnName="n" />
+                <ScalarProperty Name="ut" ColumnName="ut" />
+                <ScalarProperty Name="del" ColumnName="del" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

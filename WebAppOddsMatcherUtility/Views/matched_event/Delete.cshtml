@@ -1,0 +1,184 @@
+﻿@model WebAppOddsMatcherUtility.Models.matched_event
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>matched_event</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.eventDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.eventDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sport)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sport)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.details)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.details)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.betName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.betName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.marketName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.marketName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.rating)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.rating)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.info)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.info)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.bookmaker)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.bookmaker)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.back)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.back)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.exchange)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.exchange)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lay)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lay)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.size)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.size)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.betfairEventTypeId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.betfairEventTypeId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.betfairMarketTypeCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.betfairMarketTypeCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.competitionName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.competitionName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.countryCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.countryCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.timezone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.timezone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.n)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.n)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ut)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ut)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.del)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.del)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,734 @@
+﻿
+@model PagedList.IPagedList<WebAppOddsMatcherUtility.Models.matched_event>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/ion.rangeSlider.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/ion.rangeSlider.skinHTML5.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/Custom.css" rel="stylesheet" type="text/css" />
+<link href="~/Content/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Matched";
+}
+
+@using (Html.BeginForm("Index", "matched_event", FormMethod.Get, new { @id="frm_filter"}))
+{
+    <div id="control_area">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 text-center" style="margin-bottom: 10px;">
+                <div id="bet_type_selector_group" class="btn-group btn-group-sm" role="group" aria-label="bet type" data-toggle="buttons">
+                    <label class="btn btn-default active"><input type="radio" name="bet_type_selector" id="bt_normal_qual" checked value="optionQualifier"> Normal Qualifier</label>
+                    <label class="btn btn-default"><input type="radio" name="bet_type_selector" id="bt_free_no_return" value="optionSNR"> Free Bet Stake Not Returned (SNR)</label>
+                    <label class="btn btn-default"><input type="radio" name="bet_type_selector" id="bt_free_bet_returned" value="optionSR"> Free Bet Stake Returned (SR)</label>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3 text-center" style="margin-bottom: 10px;">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon" id="stake_amount">Stake Amount =</span>
+                    <input type="text" class="form-control" id="stake_amount_val" name="stake_amount_val" aria-describedby="stake_amount" onkeyup="ODDS_NS.inlineCalculate();" placeholder="10.00" pattern="^\d*(\.\d{2}$)?">
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3 text-center" style="margin-bottom: 10px;">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-addon" id="exchange_balance">Exchange Balance =</span>
+                    <input type="text" class="form-control" id="exchange_balance_val" name="exchange_balance_val" aria-describedby="exchange_balance">
+                </div>
+            </div>
+        </div>
+        <div class="row m-t-10">
+            <div class="col-md-6">
+                <div class="input-group input-group-sm">
+                    <!-- (with a at on the front) onchange="ODDS_NS.submitOldFilterForm(this);" -->
+                    <span class="old-filters">@Html.DropDownList("SearchByBookmaker", null, "All bookmakers", new { @class = "form-control input-sm" })</span>
+                    <span class="old-filters">@Html.DropDownList("SearchByMarketType", null, "All markets", new { @class = "form-control input-sm" })</span>
+                    <span class="old-filters">@Html.DropDownList("SearchByBack", null, "All back bets", new { @class = "form-control input-sm" })</span>
+                    <span class="old-filters">@Html.DropDownList("SearchBySize", null, "All sizes", new { @class = "form-control input-sm" })</span>
+
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div id="show_selector_group" class="btn-group btn-group-sm" role="group" aria-label="show type" data-toggle="buttons">
+                    <label class="btn btn-default active"><input type="radio" id="bt_show_arbs" name="show_selector" checked> Show Arbs 100+</label>
+                    <label class="btn btn-default"><input type="radio" id="bt_show_availability" name="show_selector"> Show Availability Only</label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-danger btn-sm pull-right m-l-10" onclick="ODDS.refreshPage()"><span class="fa fa-refresh"></span> Refresh</button>
+                <button type="button" class="btn btn-success btn-sm pull-right" data-toggle="collapse" data-target="#filters_section"><span class="fa fa-filter"></span> Filters</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="filters_section" class="collapse m-b-10">
+        <div class="row">
+            <div class="col-sm-6 col-md-2">
+                <div class="panel panel-default m-t-10 m-b-10">
+                    <div class="panel-heading">
+                        <div class="checkbox">
+                            <input type="checkbox" id="cb_sport_all" />
+                            <label for="checkbox">
+                                Sports
+                            </label>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="checkbox">
+                                    <input type="checkbox" class="cb_sport" name="filterSport" value="football"/>
+                                    <label for="checkbox">
+                                        Football
+                                    </label>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="checkbox">
+                                    <input type="checkbox" class="cb_sport" name="filterSport" value="horse" />
+                                    <label for="checkbox">
+                                        Horse Racing
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div> <!-- /col-md-2 -->
+            <div class="col-sm-6 col-md-2">
+                <div class="panel panel-default m-t-10 m-b-10">
+                    <div class="panel-heading">
+                        <div class="checkbox">
+                            <input type="checkbox" class="cb_market" id="cb_market_all" />
+                            <label for="checkbox">
+                                Market
+                            </label>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            @foreach (var market in ViewBag.FilterByMarketType)
+                            {
+                                <li class="list-group-item">
+                                    <div class="checkbox">
+                                         <input type="checkbox" class="cb_market" name="filterMarket" id="cb_market" value="@Html.DisplayFor(modelItem => market)"/>
+                                        <label for="checkbox">
+                                            @Html.DisplayFor(modelItem => market)
+                                        </label>
+                                    </div>
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div> <!-- /col-md-2 -->
+            <div class="col-sm-6 col-md-2">
+                <div class="panel panel-default m-t-10 m-b-10">
+                    <div class="panel-heading">
+                        <div class="checkbox">
+                            <input type="checkbox" id="cb_bookmaker_all" />
+                            <label for="checkbox">
+                                Bookmaker
+                            </label>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            @foreach (var bookmaker in ViewBag.FilterByBookie)
+                            {
+                                <li class="list-group-item">
+                                    <div class="checkbox">
+                                        <input type="checkbox" class="cb_bookmaker" name="filterBookmaker" value="@Html.DisplayFor(modelItem => bookmaker)"/>
+                                        <label for="checkbox">
+                                            @Html.DisplayFor(modelItem => bookmaker)
+                                        </label>
+                                    </div>
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </div> <!-- /col-md-2 -->
+            <div class="col-sm-6 col-md-2">
+                <div class="panel panel-default m-t-10 m-b-10">
+                    <div class="panel-heading">
+                        <div class="checkbox">
+                            <!-- for the moment we only have one exchange so disable the checkboxes -->
+                            <input type="checkbox" class="cb_exchange" id="cb_exchange_all" checked disabled/>
+                            <label for="checkbox">
+                                Exchange
+                            </label>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="checkbox">
+                                    <!-- for the moment we only have one exchange so disable the checkboxes -->
+                                    <input type="checkbox" class="cb_exchange" name="filterExchange" value="betfair" checked disabled/>
+                                    <label for="checkbox">
+                                        Betfair
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>  <!-- /col-md-2 -->
+            <div class="col-sm-12 col-md-4">
+                <div class="row">
+                    <div class="col-sm-6 col-md-6">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="checkbox">
+                                    <input type="checkbox" id="cb_min_rating" name="cb_min_rating_filter"/>
+                                    <label for="checkbox">
+                                        Min. Rating
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                @if (string.IsNullOrEmpty(ViewBag.filterMinRating))
+                                {
+                                    <input class="form-control" id="val_min_rating" placeholder="Min." name="filterMinRating" value=""/>
+                                }
+                                else
+                                {
+                                    <input class="form-control" id="val_min_rating" placeholder="Min." name="filterMinRating" value="@ViewBag.filterMinRating"/>
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="checkbox">
+                                    <input type="checkbox" id="cb_min_odds" name="cb_min_odds_filter"/>
+                                    <label for="checkbox">
+                                        Min. Odds
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                @if (string.IsNullOrEmpty(ViewBag.filterMinOdds))
+                                {
+                                    <input class="form-control" id="val_min_odds" placeholder="Min." name="filterMinOdds" value=""/>
+                                }
+                                else
+                                {
+                                    <input class="form-control" id="val_min_odds" placeholder="Min." name="filterMinOdds" value="@ViewBag.filterMinOdds"/>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6 col-md-6">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="checkbox">
+                                    <input type="checkbox" id="cb_max_rating" name="cb_max_rating_filter"/>
+                                    <label for="checkbox">
+                                        Max. Rating
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                @if (string.IsNullOrEmpty(ViewBag.filterMaxRating))
+                                {
+                                    <input class="form-control" id="val_max_rating" placeholder="Max." name="filterMaxRating" value="" />
+                                }
+                                else
+                                {
+                                    <input class="form-control" id="val_max_rating" placeholder="Max." name="filterMaxRating" value="@ViewBag.filterMaxRating"/>
+                                }
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="checkbox">
+                                    <input type="checkbox" id="cb_max_odds" name="cb_max_odds_filter"/>
+                                    <label for="checkbox">
+                                        Max. Odds
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                @if (string.IsNullOrEmpty(ViewBag.filterMaxOdds))
+                                {
+                                    <input class="form-control" id="val_max_odds" placeholder="Max." name="filterMaxOdds" value="" />
+                                }
+                                else
+                                {
+                                    <input class="form-control" id="val_max_odds" placeholder="Max." name="filterMaxOdds" value="@ViewBag.filterMaxOdds"/>
+                                }
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="checkbox">
+                            <input type="checkbox" id="cb_min_availability" name="cb_min_availability_filter"/>
+                            <label for="checkbox">
+                                Min. Availability
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="min-avail-addon">£</span>
+                            @if (string.IsNullOrEmpty(ViewBag.filterMinAvail))
+                            {
+                                <input class="form-control" id="val_min_availability" aria-describedby="min-avail-addon" name="filterMinAvail" value=""/>
+                            }
+                            else
+                            {
+                                <input class="form-control" id="val_min_availability" aria-describedby="min-avail-addon" name="filterMinAvail" value="@ViewBag.filterMinAvail"/>
+                            }
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="checkbox">
+                            <input type="checkbox" id="cb_limit_time" name="cb_limit_time_filter"/>
+                            <label for="checkbox">
+                                Limit Timeframe
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        @if (string.IsNullOrEmpty(ViewBag.filterTimeLimit))
+                        {
+                            <input type="text" id="timeframe" name="filterTimeLimit" value="now" />
+                        }
+                        else
+                        {
+                            <input type="text" id="timeframe" name="filterTimeLimit" value="@ViewBag.filterTimeLimit" />
+                        }
+                    </div>
+                </div>
+            </div> <!-- /col-md-4 -->
+        </div> <!-- /row -->
+        <div class="row m-t-10">
+            <div class="col-sm-8 col-md-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="search-addon"><span class="fa fa-search"></span></span>
+                    
+                    @if (string.IsNullOrEmpty(ViewBag.filterSearchText))
+                    {
+                        <input id="search_filter" name="filterSearchText" aria-describedby="search-addon" class="form-control" placeholder="Search by team name, horse name, league name, output (i.e. 0-0)" value="" />
+                    }
+                    else
+                    {
+                        <input id="search_filter" name="filterSearchText" aria-describedby="search-addon" class="form-control" placeholder="Search by team name, horse name, league name, output (i.e. 0-0)" value="@ViewBag.filterSearchText" />
+                    }
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-4">
+                <button type="button" class="btn btn-primary" onclick="ODDS_NS.submitFilterForm(this);"><span class="fa fa-check"></span> Apply</button>
+                <div class="pull-right">
+                    <button type="button" class="btn btn-default"><span class="fa fa-minus-circle"></span> Clear Filters</button>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /#filters_section -->
+
+} <!-- end of form -->
+
+@if (Model.Count > 0)
+                               {
+    <div id="table_section">
+        <div class="row">
+            <div class="col-md-12">
+                <table id="odds_table" class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.ActionLink("Event Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                            </th>
+                            <th>
+                                Sport
+                            </th>
+                            <th>
+                                @Html.ActionLink("Details", "Index", new { sortOrder = ViewBag.DetailsSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                            </th>
+                            <th>
+                                @Html.ActionLink("Bet", "Index", new { sortOrder = ViewBag.BetSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                            </th>
+                            <th>
+                                @Html.ActionLink("Market", "Index", new { sortOrder = ViewBag.MarketSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                            </th>
+                            <th>
+                                @Html.ActionLink("Rating", "Index", new { sortOrder = ViewBag.RatingSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                            </th>
+                            <th>
+                                <div class="split-hcell">
+                                    @Html.ActionLink("Bookmaker", "Index", new { sortOrder = ViewBag.BookmakerSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                                </div>
+                                <div>
+                                    @Html.ActionLink("Exchange", "Index", new { sortOrder = ViewBag.ExchangeSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                                </div>
+                            </th>
+                            <th>
+                                <div class="split-hcell">
+                                    @Html.ActionLink("Back", "Index", new { sortOrder = ViewBag.BackSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                                </div>
+                                <div>
+                                    @Html.ActionLink("Lay", "Index", new { sortOrder = ViewBag.LaySortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                                </div>
+                            </th>
+                            <th>
+                                Odds
+                            </th>
+                            <th>
+                                Stake
+                            </th>
+                            <th>
+                                Position
+                            </th>
+                            <th>
+                                Liability
+                            </th>
+                            <th>
+                                Availability
+                            </th>
+                            <!--<th>
+                                @Html.ActionLink("Back", "Index", new { sortOrder = ViewBag.BackSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                            </th>
+                            <th>
+                                @Html.ActionLink("Lay", "Index", new { sortOrder = ViewBag.LaySortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                            </th>
+                            <th>
+                                @Html.ActionLink("Size", "Index", new { sortOrder = ViewBag.SizeSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText })
+                            </th> -->
+                            <th>
+                                Calculator
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                           {
+                            <tr>
+                                <td>
+                                    @Html.ValueFor(modelItem => item.eventDate, "{0:dd/MM/yyyy HH:mm}")
+                                </td>
+                                <td>
+                                    <img src=@Html.DisplayFor(modelItem => item.sport) alt="Football" data-toggle="popover" title="Football league Premiership">
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.details)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.betName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.marketName)
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.rating)
+                                </td>
+                                <td class="text-center">
+                                    <div class="split-cell-top p-b-10 m-b-10">
+                                        <img src=@Html.DisplayFor(modelItem => item.bookmaker) alt="Bookmaker">
+                                    </div>
+                                    <div>
+                                        <img src=@Html.DisplayFor(modelItem => item.exchange) alt="Exchange">
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="split-cell-top-sm p-b-10 m-b-10">
+                                        Back
+                                    </div>
+                                    <div class="split-cell-bottom-sm">
+                                        Lay
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="split-cell-top p-b-10 m-b-10">
+                                        <span class="back-highlight">
+                                            @Html.DisplayFor(modelItem => item.back)
+                                        </span>
+                                    </div>
+                                    <div class="split-cell-bottom">
+                                        <span class="lay-highlight">
+                                            @Html.DisplayFor(modelItem => item.lay)
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="split-cell-top p-b-10 m-b-10">
+                                        <span id="stake_entered" class="back-highlight">
+                                            <!-- same value as entered into the Stake field -->
+                                        </span>
+                                    </div>
+                                    <div class="split-cell-bottom">
+                                        <span id="you_lay" class="lay-highlight">
+                                            <!-- you lay from the calculator -->
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="split-cell-top p-b-10 m-b-10">
+                                        <span id="bookmaker_position" class="back-highlight">
+                                            <!-- bookmaker position (bet profit bookmaker win) from the calculator-->
+                                        </span>
+                                    </div>
+                                    <div class="split-cell-bottom">
+                                        <span id="exchange_position" class="lay-highlight">
+                                            <!-- exchange position (bet profit exchange win) from the calculator -->
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="text-center fixed-cell">
+                                    <div id="liability" class="liability-highlight">
+                                        <!-- control for showing liability from the calculator -->
+                                    </div>
+                                </td>
+                                <td class="text-center fixed-cell">
+                                    <div id="availability" class="availability-highlight">
+                                        <!-- control for showing availability from the server -->
+                                        £@Html.DisplayFor(modelItem => item.size)
+                                    </div>
+                                </td>
+
+
+                                <!--<td>
+                                    <span class="back-highlight">@Html.DisplayFor(modelItem => item.back)</span>
+                                </td>
+                                <td>
+                                    <span class="lay-highlight">@Html.DisplayFor(modelItem => item.lay)</span>
+                                </td>-->
+
+                                <td>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary profit-btn" data-toggle="modal" data-target="#calculatorModal"
+                                            data-event="@Html.DisplayFor(modelItem => item.details)"
+                                            data-event-date="@Html.ValueFor(modelItem => item.eventDate, "{0:dd/MM/yyyy HH:mm}")"
+                                            data-back-odds=@Html.DisplayFor(modelItem => item.back)
+                                            data-back-comm="0.00"
+                                            data-lay-odds=@Html.DisplayFor(modelItem => item.lay)
+                                            data-lay-comm="0.05"
+                                            data-bookmaker-name="@Html.DisplayFor(modelItem => item.bookmaker_name)"
+                                            data-exchange-name="Betfair Exchange"
+                                            data-market-name="@Html.DisplayFor(modelItem => item.marketName)"
+                                            data-bet-name="@Html.DisplayFor(modelItem => item.betName)">
+                                        <span class="fa fa-calculator fa-lg"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+
+                <div id='Paging' class="text-center">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchBySize = ViewBag.SizeFilter, filterSport = ViewBag.filterSport, filterBookmaker = ViewBag.filterBookmaker, filterMarket = ViewBag.filterMarket, filterExchange = ViewBag.filterExchange, filterMinRating = ViewBag.filterMinRating, filterMaxRating = ViewBag.filterMaxRating, filterMinOdds = ViewBag.filterMinOdds, filterMaxOdds = ViewBag.filterMaxOdds, filterMinAvail = ViewBag.filterMinAvail, filterTimeLimit = ViewBag.filterTimeLimit, filterSearchText = ViewBag.filterSearchText }))
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal formatting -->
+    <div class="modal fade" id="calculatorModal" tabindex="-1" role="dialog" aria-labelledby="calculatorModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>*@
+                    <h4 class="modal-title" id="calculatorModalLabel">Profit Calculator</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="p-b-10">
+                        <label class="radio-inline">
+                            <input type="radio" tabindex="-1" name="inlineRadioOptions" id="inlineRadioQualifier" value="optionQualifier" data-toggle="tooltip" data-placement="top" title="Qualifying Bet"> Qualifier
+                        </label>
+                        <label class="radio-inline p-l-40">
+                            <input type="radio" tabindex="-1" name="inlineRadioOptions" id="inlineRadioSNR" value="optionSNR" data-toggle="tooltip" data-placement="top" title="Free Bet, Stake Not Returned"> Free Bet SNR
+                        </label>
+                        <label class="radio-inline p-l-40">
+                            <input type="radio" tabindex="-1" name="inlineRadioOptions" id="inlineRadioSR" value="optionSR" data-toggle="tooltip" data-placement="top" title="Free Bet, Stake Returned"> Free Bet SR
+                        </label>
+                    </div>
+                    <div class="p-b-10">
+                    </div>
+                    <div>
+                        <form>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-md-3">
+                                        <label for="stake" class="control-label">Stake</label>
+                                        <!-- might want to use something like onkeyup="changeStakeFunction()" rather than using jquery binding as we need to calculate outside of this modal -->
+                                        <!-- title needs to change as we are now binding on onkeyup not onchange -->
+                                        <input type="text" class="form-control white-on-black"  id="stake" data-toggle="tooltip" data-placement="top" title="Enter Stake, then hit <Enter> or <Tab> key to calculate">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <label for="event-name" class="control-label">Event</label>
+                                        <input type="text" readonly tabindex="-1" class="form-control" id="event-name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-t-20">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="event-date" class="control-label">Date</label>
+                                        <input type="text" readonly tabindex="-1" class="form-control" id="event-date">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="bet-name" class="control-label">Bet</label>
+                                        <input type="text" readonly tabindex="-1" class="form-control" id="bet-name">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="market-name" class="control-label">Market</label>
+                                        <input type="text" readonly tabindex="-1" class="form-control" id="market-name">
+                                    </div>
+                                </div>
+                            </div>
+                            <a>&nbsp;</a>
+                            <div class="row p-b-10 bg-light-blue">
+                                <div class="form-group">
+                                    <div class="col-md-3 bg-light-blue">
+                                        <label for="back-odds" class="control-label">Back Odds</label>
+                                        <input type="text" readonly tabindex="-1" class="form-control text-right" id="back-odds">
+                                    </div>
+                                    <div class="col-md-3 bg-light-blue">
+                                        <label for="back-comm" class="control-label">Back Comm</label>
+                                        <input type="text" tabindex="-1" class="form-control text-right" id="back-comm">
+                                    </div>
+                                    <div class="col-md-6 bg-light-blue">
+                                        <label for="bookmaker-name" class="control-label">Bookmaker</label>
+                                        <input type="text" readonly tabindex="-1" class="form-control" id="bookmaker-name">
+                                    </div>
+                                </div>
+                                <br />
+                            </div>
+                            <div class="p-t-10">
+                                <div class="row p-b-10 bg-pink">
+                                    <div class="form-group">
+                                        <div class="col-md-3 bg-pink">
+                                            <label for="lay-odds" class="control-label">Lay Odds</label>
+                                            <input type="text" readonly tabindex="-1" class="form-control text-right" id="lay-odds">
+                                        </div>
+                                        <div class="col-md-3 bg-pink">
+                                            <label for="lay-comm" class="control-label">Lay Comm</label>
+                                            <input type="text" tabindex="-1" class="form-control text-right" id="lay-comm">
+                                        </div>
+                                        <div class="col-md-6 bg-pink">
+                                            <label for="exchange-name" class="control-label">Exchange</label>
+                                            <input type="text" readonly tabindex="-1" class="form-control" id="exchange-name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row p-b-10 bg-pink">
+                                    <div class="form-group">
+                                        <div class="col-md-3">
+                                            <label for="lay-amount" class="control-label">You Lay</label>
+                                            <input type="text" readonly tabindex="-1" class="form-control text-right" id="lay-amount">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label for="liability-amount" class="control-label">Liability</label>
+                                            <input type="text" readonly tabindex="-1" class="form-control text-right" id="liability-amount">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="p-t-10">
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    Result
+                                </th>
+                                <th>
+                                    Bookmaker Bal
+                                </th>
+                                <th>
+                                    Exchange Bal
+                                </th>
+                                <th>
+                                    Bet Profit
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Bookmaker Win
+                                </td>
+                                <td>
+                                    <input type="text" readonly tabindex="-1" class="form-control text-center" id="bookie-win-bbal">
+                                </td>
+                                <td>
+                                    <input type="text" readonly tabindex="-1" class="form-control text-center" id="bookie-win-xbal">
+                                </td>
+                                <td>
+                                    <input type="text" readonly tabindex="-1" class="form-control text-center" id="bookie-win-profit">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Exchange Win
+                                </td>
+                                <td>
+                                    <input type="text" readonly tabindex="-1" class="form-control text-center" id="exchange-win-bbal">
+                                </td>
+                                <td>
+                                    <input type="text" readonly tabindex="-1" class="form-control text-center" id="exchange-win-xbal">
+                                </td>
+                                <td>
+                                    <input type="text" readonly tabindex="-1" class="form-control text-center" id="exchange-win-profit">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Calculate</button>
+                    <button type="button" class="btn btn-default" tabindex="-1" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+else
+{
+    if (string.IsNullOrEmpty(ViewBag.CurrentFilter) &&
+    string.IsNullOrEmpty(ViewBag.BookmakerFilter) &&
+    string.IsNullOrEmpty(ViewBag.MarketTypeFilter) &&
+    string.IsNullOrEmpty(ViewBag.ViewBag.BackFilter) &&
+    string.IsNullOrEmpty(ViewBag.ViewBag.BackFilter))
+    {
+        <p> There are no events on the database.</p>
+    }
+    else
+    {
+        <p> There are no matches for the filter.</p>
+    }
+}
+
+<script src="~/Scripts/ion.rangeSlider.min.js" type="text/javascript"></script>
+<script src="~/Scripts/oddsmatcher.js" type="text/javascript"></script>
+<script>
+    $(document).ready(function () {
+        ODDS_NS.init();
+    });
+
+</script>
+
+
