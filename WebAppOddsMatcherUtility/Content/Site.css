@@ -20,6 +20,10 @@ table th {
     width: auto !important;
 }
 
+.table {
+  font-size: 12px !important;
+}
+
 input.button-add {
     background-image: url(/images/view_refresh.png); /* 16px x 16px */
     background-color: transparent; /* make the button transparent */
@@ -36,3 +40,4 @@ input.button-add {
 .box {
     vertical-align:middle !important;
 }​
+
