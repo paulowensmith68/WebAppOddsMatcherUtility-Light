@@ -93,6 +93,11 @@ ODDS_NS.submitFilterForm = function (applyBtn) {
     applyBtn.form.submit();
 }
 
+//ODDS_NS.submitClearFilterForm = function (clearBtn) {
+//    //TODO: may need some logic in here before sending form to server
+//    document.getElementById("search_filter").reset();
+//}
+
 ODDS_NS.refreshPage = function() {
     location.reload();
 }

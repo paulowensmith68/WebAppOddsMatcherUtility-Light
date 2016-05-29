@@ -18,7 +18,7 @@ namespace WebAppOddsMatcherUtility.Controllers
         private oddsmatchingEntities db = new oddsmatchingEntities();
 
         // GET: matched_event
-        public ActionResult Index(int? page, string sortOrder, string currentFilter, string searchByBookmaker, string searchByMarketType, string searchByBack, string searchBySize, string[] filterSport, string[] filterBookmaker, string[] filterMarket, string[] filterExchange, string filterMinRating, string filterMaxRating, string filterMinOdds, string filterMaxOdds, string filterMinAvail, string filterTimeLimit, string filterSearchText)
+        public ActionResult Index(int? page, string sortOrder, string currentFilter, string searchByBookmaker, string searchByMarketType, string searchByBack, string searchByLay, string searchBySize, string filterSearchText)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
@@ -35,17 +35,8 @@ namespace WebAppOddsMatcherUtility.Controllers
             ViewBag.CurrentFilter = searchByBookmaker;
             ViewBag.MarketTypeFilter = searchByMarketType;
             ViewBag.BackFilter = searchByBack;
+            ViewBag.SizeFilter = searchByLay;
             ViewBag.SizeFilter = searchBySize;
-            ViewBag.filterSport = filterSport;
-            ViewBag.filterBookmaker = filterBookmaker;
-            ViewBag.filterMarket = filterMarket;
-            ViewBag.filterExchange = filterExchange;
-            ViewBag.filterMinRating = filterMinRating;
-            ViewBag.filterMaxRating = filterMaxRating;
-            ViewBag.filterMinOdds = filterMinOdds;
-            ViewBag.filterMaxOdds = filterMaxOdds;
-            ViewBag.filterMinAvail = filterMinAvail;
-            ViewBag.filterTimeLimit = filterTimeLimit;
             ViewBag.filterSearchText = filterSearchText;
 
             if (searchByBookmaker == null)
@@ -61,7 +52,7 @@ namespace WebAppOddsMatcherUtility.Controllers
 
             var matched = (from s in db.matched_event
                            orderby s.rating descending
-                           select s).Take(6000);
+                           select s).Take(10000);
 
             //
             // Filter
@@ -81,225 +72,114 @@ namespace WebAppOddsMatcherUtility.Controllers
                 double backFilter = 0;
                 switch (searchByBack)
                 {
-                    case "Back bet 4+":
+                    case "Back odds min 20":
+                        backFilter = 20;
+                        break;
+                    case "Back odds min 10":
+                        backFilter = 10;
+                        break;
+                    case "Back odds min 9":
+                        backFilter = 9;
+                        break;
+                    case "Back odds min 8":
+                        backFilter = 8;
+                        break;
+                    case "Back odds min 7":
+                        backFilter = 7;
+                        break;
+                    case "Back odds min 6":
+                        backFilter = 6;
+                        break;
+                    case "Back odds min 5":
+                        backFilter = 5;
+                        break;
+                    case "Back odds min 4":
                         backFilter = 4;
                         break;
-                    case "Back bet 3+":
+                    case "Back odds min 3":
                         backFilter = 3;
                         break;
-                    case "Back bet 2+":
+                    case "Back odds min 2":
                         backFilter = 2;
                         break;
-                    case "Back bet 1+":
+                    case "Back odds min 1":
                         backFilter = 1;
                         break;
                 }
                 matched = matched.Where(s => s.back >= backFilter);
+            }
+            if (!String.IsNullOrEmpty(searchByLay))
+            {
+                double LayFilter = 0;
+                switch (searchByLay)
+                {
+                    case "Lay odds min 20":
+                        LayFilter = 20;
+                        break;
+                    case "Lay odds min 10":
+                        LayFilter = 10;
+                        break;
+                    case "Lay odds min 9":
+                        LayFilter = 9;
+                        break;
+                    case "Lay odds min 8":
+                        LayFilter = 8;
+                        break;
+                    case "Lay odds min 7":
+                        LayFilter = 7;
+                        break;
+                    case "Lay odds min 6":
+                        LayFilter = 6;
+                        break;
+                    case "Lay odds min 5":
+                        LayFilter = 5;
+                        break;
+                    case "Lay odds min 4":
+                        LayFilter = 4;
+                        break;
+                    case "Lay odds min 3":
+                        LayFilter = 3;
+                        break;
+                    case "Lay odds min 2":
+                        LayFilter = 2;
+                        break;
+                    case "Lay odds min 1":
+                        LayFilter = 1;
+                        break;
+                }
+                matched = matched.Where(s => s.lay >= LayFilter);
             }
             if (!String.IsNullOrEmpty(searchBySize))
             {
                 double sizeFilter = 0;
                 switch (searchBySize)
                 {
-                    case "Size £2000+":
+                    case "Avail. min £2000":
                         sizeFilter = 2000;
                         break;
-                    case "Size £1000+":
+                    case "Avail. min £1000":
                         sizeFilter = 1000;
                         break;
-                    case "Size £500+":
+                    case "Avail. min £500":
                         sizeFilter = 500;
                         break;
-                    case "Size £400+":
+                    case "Avail. min £400":
                         sizeFilter = 400;
                         break;
-                    case "Size £300+":
+                    case "Avail. min £300":
                         sizeFilter = 300;
                         break;
-                    case "Size £200+":
+                    case "Avail. min £200":
                         sizeFilter = 200;
                         break;
-                    case "Size £100+":
+                    case "Avail. min £100":
                         sizeFilter = 100;
                         break;
-                    case "Size £50+":
+                    case "Avail. min £50":
                         sizeFilter = 50;
                         break;
                 }
                 matched = matched.Where(s => s.size >= sizeFilter);
-            }
-
-            // Filter - Sport
-            if (filterSport != null)
-            {
-                foreach(string sport in filterSport)
-                {
-                    string filterString = HttpUtility.UrlDecode(sport).ToLower();
-                    matched = matched.Where(s => s.sport.Contains(filterString));
-                }
-            }
-
-            //if (!String.IsNullOrEmpty(filterSport))
-            //{
-            //   if (filterSport.IndexOf(",") > 0)
-            //    {
-            //        char[] delimiters = new char[] { ',' };
-            //        string[] SportsNames = filterSport.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-            //        foreach (string sport in SportsNames)
-            //        {
-            //            matched = matched.Where(s => s.sport.Contains(sport.ToLower()));
-            //        }
-            //    }
-            //    else
-            //    {
-            //        matched = matched.Where(s => s.sport.Contains(filterSport.ToLower()));
-            //    }
-            //}
-
-            // Filter - Bookmakers
-            if (filterBookmaker != null && filterBookmaker.Length > 0)
-            {
-                foreach (string bookmaker in filterBookmaker)
-                {
-                    string filterString = HttpUtility.UrlDecode(bookmaker).ToLower();
-                    matched = matched.Where(s => s.bookmaker_name.Contains(filterString));
-                }
-            }
-
-            //if (!String.IsNullOrEmpty(filterBookmaker))
-            //{
-            //    if (filterBookmaker.IndexOf(",") > 0)
-            //    {
-            //        char[] delimiters = new char[] { ',' };
-            //        string[] BookmakerNames = filterBookmaker.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-            //        foreach (string bookmaker in BookmakerNames)
-            //        {
-            //            matched = matched.Where(s => s.bookmaker.Contains(bookmaker));
-            //        }
-            //    }
-            //    else
-            //    {
-            //        matched = matched.Where(s => s.bookmaker.Contains(filterBookmaker));
-            //    }
-            //}
-
-            // Filter - Market Types
-            if (filterMarket != null && filterMarket.Length > 0)
-            {
-                foreach (string market in filterMarket)
-                {
-                    string filterString = HttpUtility.UrlDecode(market).ToLower();
-                    matched = matched.Where(s => s.marketName.Contains(filterString));
-                }
-            }
-            //if (!String.IsNullOrEmpty(filterMarket))
-            //{
-            //    if (filterMarket.IndexOf(",") > 0)
-            //   {
-            //        char[] delimiters = new char[] { ',' };
-            //        string[] MarketNames = filterMarket.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-            //        foreach (string market in MarketNames)
-            //        {
-            //            matched = matched.Where(s => s.marketName.Contains(market));
-            //        }
-            //    }
-            //    else
-            //    {
-            //        matched = matched.Where(s => s.marketName.Contains(filterMarket));
-            //    }
-            //}
-
-
-            // Filter - Exchange
-            if (filterExchange != null && filterExchange.Length > 0)
-            {
-                foreach (string exchange in filterExchange)
-                {
-                    string filterString = HttpUtility.UrlDecode(exchange).ToLower();
-                    matched = matched.Where(s => s.marketName.Contains(filterString));
-                }
-            }
-
-            //if (!String.IsNullOrEmpty(filterExchange))
-            //{
-            //    if (filterExchange.IndexOf(",") > 0)
-            //    {
-            //        char[] delimiters = new char[] { ',' };
-            //        string[] ExchangeNames = filterExchange.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-            //        foreach (string exchange in ExchangeNames)
-            //        {
-            //            matched = matched.Where(s => s.marketName.Contains(exchange.ToLower()));
-            //       }
-            //    }
-            //    else
-            //    {
-            //        matched = matched.Where(s => s.exchange.Contains(filterExchange.ToLower()));
-            //   }
-            //}
-
-
-            // Filter MinRating
-            if (!String.IsNullOrEmpty(filterMinRating))
-            {
-                string strValue;
-                double dblNumber;
-                strValue = filterMinRating;
-                if (Double.TryParse(strValue, out dblNumber))
-                {
-                    matched = matched.Where(s => s.rating >= dblNumber);
-                }
-            }
-
-
-            // Filter MaxRating
-            if (!String.IsNullOrEmpty(filterMaxRating))
-            {
-                string strValue;
-                double dblNumber;
-                strValue = filterMaxRating;
-                if (Double.TryParse(strValue, out dblNumber))
-                {
-                    matched = matched.Where(s => s.rating <= dblNumber);
-                }
-            }
-
-
-            // Filter MinOdds
-            if (!String.IsNullOrEmpty(filterMinOdds))
-            {
-                string strValue;
-                double dblNumber;
-                strValue = filterMinOdds;
-                if (Double.TryParse(strValue, out dblNumber))
-                {
-                    matched = matched.Where(s => s.back >= dblNumber);
-                }
-            }
-
-
-            // Filter MaxOdds
-            if (!String.IsNullOrEmpty(filterMaxOdds))
-            {
-                string strValue;
-                double dblNumber;
-                strValue = filterMaxOdds;
-                if (Double.TryParse(strValue, out dblNumber))
-                {
-                    matched = matched.Where(s => s.back <= dblNumber);
-                }
-            }
-
-
-            // Filter MinAvail
-            if (!String.IsNullOrEmpty(filterMinAvail))
-            {
-                string strValue;
-                double dblNumber;
-                strValue = filterMinAvail;
-                if (Double.TryParse(strValue, out dblNumber))
-                {
-                    matched = matched.Where(s => s.size >= dblNumber);
-                }
             }
 
 
@@ -372,6 +252,17 @@ namespace WebAppOddsMatcherUtility.Controllers
                     matched = matched.OrderByDescending(s => s.rating);
                     break;
             }
+
+            // Search Text filter
+            if (!String.IsNullOrEmpty(filterSearchText))
+            {
+
+                matched = matched.Where(s => s.details.ToLower().Contains(filterSearchText.ToLower())
+                        || s.competitionName.ToLower().Contains(filterSearchText.ToLower())
+                        || s.betName.ToLower().Contains(filterSearchText.ToLower()));
+
+            }
+
 
             int pageSize = 15;
             int pageNumber = (page ?? 1);
@@ -497,25 +388,48 @@ namespace WebAppOddsMatcherUtility.Controllers
             ViewBag.SearchByBookmaker = new SelectList(bookmakers);
 
 
-            // Build list of Back bets for filters
+            // Build list of Back odds mins for filters
             var backs = new List<string>();
-            backs.Add("Back bet 4+");
-            backs.Add("Back bet 3+");
-            backs.Add("Back bet 2+");
-            backs.Add("Back bet 1+");
+            backs.Add("Back odds min 20");
+            backs.Add("Back odds min 10");
+            backs.Add("Back odds min 9");
+            backs.Add("Back odds min 8");
+            backs.Add("Back odds min 7");
+            backs.Add("Back odds min 6");
+            backs.Add("Back odds min 5");
+            backs.Add("Back odds min 4");
+            backs.Add("Back odds min 3");
+            backs.Add("Back odds min 2");
+            backs.Add("Back odds min 1");
             ViewBag.SearchByBack = new SelectList(backs);
+
+
+            // Build list of Lay odds mins for filters
+            var lays = new List<string>();
+            lays.Add("Lay odds min 20");
+            lays.Add("Lay odds min 10");
+            lays.Add("Lay odds min 9");
+            lays.Add("Lay odds min 8");
+            lays.Add("Lay odds min 7");
+            lays.Add("Lay odds min 6");
+            lays.Add("Lay odds min 5");
+            lays.Add("Lay odds min 4");
+            lays.Add("Lay odds min 3");
+            lays.Add("Lay odds min 2");
+            lays.Add("Lay odds min 1");
+            ViewBag.SearchByLay = new SelectList(lays);
 
 
             // Build list of Size's for filters
             var sizes = new List<string>();
-            sizes.Add("Size £2000+");
-            sizes.Add("Size £1000+");
-            sizes.Add("Size £500+");
-            sizes.Add("Size £400+");
-            sizes.Add("Size £300+");
-            sizes.Add("Size £200+");
-            sizes.Add("Size £100+");
-            sizes.Add("Size £50+");
+            sizes.Add("Avail. min £2000");
+            sizes.Add("Avail. min £1000");
+            sizes.Add("Avail. min £500");
+            sizes.Add("Avail. min £400");
+            sizes.Add("Avail. min £300");
+            sizes.Add("Avail. min £200");
+            sizes.Add("Avail. min £100");
+            sizes.Add("Avail. min £50");
             ViewBag.SearchBySize = new SelectList(sizes);
 
 
