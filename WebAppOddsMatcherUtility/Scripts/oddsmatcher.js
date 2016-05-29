@@ -70,7 +70,7 @@ ODDS_NS.init = function()
     //});
 
     // change handler for the bet type radio buttons
-    $('input[name="bet_type_selector"]').on('change', ODDS_NS.inlineCalculate);
+    $('input[name="betTypeSelector"]').on('change', ODDS_NS.inlineCalculate);
 
     // call inline calculator with preset values
     ODDS_NS.inlineCalculate();
@@ -84,25 +84,50 @@ ODDS_NS.init = function()
 }
 
 // TODO: deprecate this method
-ODDS_NS.submitOldFilterForm = function(selectObj) {
+ODDS_NS.submitOldFilterForm = function( selectObj ) {
     selectObj.form.submit();
 }
 
-ODDS_NS.submitFilterForm = function (applyBtn) {
+ODDS_NS.submitFilterForm = function( applyBtn ) {
     //TODO: may need some logic in here before sending form to server
     applyBtn.form.submit();
 }
 
-//ODDS_NS.submitClearFilterForm = function (clearBtn) {
-//    //TODO: may need some logic in here before sending form to server
-//    document.getElementById("search_filter").reset();
-//}
+ODDS_NS.submitClearFilterForm = function (clearBtn) {
+    var frm = document.getElementById("frm_filter");
+    var frm_elements = frm.elements;
+    var frm_elements_len = frm_elements.length;
+    for (i = 0; i < frm_elements_len; i++) {
+        field_type = frm_elements[i].type.toLowerCase();
+        switch (field_type) {
+            case "text":
+            case "password":
+            case "textarea":
+            case "hidden":
+                frm_elements[i].value = "";
+                break;
+            case "radio":
+            case "checkbox":
+                if (frm_elements[i].checked) {
+                    frm_elements[i].checked = false;
+                }
+                break;
+            case "select-one":
+            case "select-multi":
+                frm_elements[i].selectedIndex = -1;
+                break;
+            default:
+                break;
+        }
+    }
+    frm.submit();
+}
 
 ODDS_NS.refreshPage = function() {
     location.reload();
 }
 
-ODDS_NS.inlineCalculate = function(event)
+ODDS_NS.inlineCalculate = function( event )
 {
     // get the stake value, default it to 10.00 if the field is cleared
     var stake_val = document.getElementById('stake_amount_val').value;
@@ -115,7 +140,7 @@ ODDS_NS.inlineCalculate = function(event)
     // set the global variable, default to £10.00 if the field is empty
     ODDS_NS.g_stake = stake_val.length === 0 ? parseFloat(10.00) : parseFloat(stake_val);
     
-    ODDS_NS.g_betType = document.querySelector('input[name="bet_type_selector"]:checked').value;
+    ODDS_NS.g_betType = document.querySelector('input[name="betTypeSelector"]:checked').value;
     $('#odds_table > tbody > tr').each( ODDS_NS.calc );
         
 }
@@ -274,7 +299,7 @@ ODDS_NS.calc = function( i, row )
 // Modal caclulator functions
 //
 
-ODDS_NS.clearModalCalculatorData = function(e) {
+ODDS_NS.clearModalCalculatorData = function( e ) {
     $(this).data('bs.modal', null);
 }
 

@@ -98,7 +98,7 @@ table > tbody > tr > td > div > span.lay-highlight {
 
 /* controls section */
 #control_area{ border: 1px solid #ddd; border-radius: 4px; padding:5px; background-color: #dedede; margin-bottom: 10px; }
-.old-filters{ display: inline-block; padding-right: 10px; }
+.old-filters{ display: inline-block; padding-right: 10px; } /* Not used in light version */
 
 /* Minimum Width for certain colums*/
 .width-min-100 {min-width:200px !important}

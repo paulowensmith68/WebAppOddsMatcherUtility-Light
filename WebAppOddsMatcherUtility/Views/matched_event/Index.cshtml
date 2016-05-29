@@ -15,14 +15,29 @@
 {
     <div id="control_area">
         <div class="row">
-            <div class="col-sm-12 col-md-6 text-center" style="margin-bottom: 10px;">
+            <div class="col-sm-12 col-md-6 m-b-10">
                 <div id="bet_type_selector_group" class="btn-group btn-group-sm" role="group" aria-label="bet type" data-toggle="buttons">
-                    <label class="btn btn-default active"><input type="radio" name="bet_type_selector" id="bt_normal_qual" checked value="optionQualifier"> Normal Qualifier</label>
-                    <label class="btn btn-default"><input type="radio" name="bet_type_selector" id="bt_free_no_return" value="optionSNR"> Free Bet Stake Not Returned (SNR)</label>
-                    <label class="btn btn-default"><input type="radio" name="bet_type_selector" id="bt_free_bet_returned" value="optionSR"> Free Bet Stake Returned (SR)</label>
+                    @if (ViewBag.betTypeSelector == "optionSR")
+                    {
+                        <label class="btn btn-default"><input type="radio" name="betTypeSelector" id="bt_normal_qual" value="optionQualifier"> Normal Qualifier</label>
+                        <label class="btn btn-default"><input type="radio" name="betTypeSelector" id="bt_free_no_return" value="optionSNR"> Free Bet Stake Not Returned (SNR)</label>
+                        <label class="btn btn-default active"><input type="radio" name="betTypeSelector" id="bt_free_bet_returned" checked  value="optionSR"> Free Bet Stake Returned (SR)</label>
+                    }
+                    else if (ViewBag.betTypeSelector == "optionSNR")
+                    {
+                        <label class="btn btn-default"><input type="radio" name="betTypeSelector" id="bt_normal_qual" value="optionQualifier"> Normal Qualifier</label>
+                        <label class="btn btn-default active"><input type="radio" name="betTypeSelector" id="bt_free_no_return" checked value="optionSNR"> Free Bet Stake Not Returned (SNR)</label>
+                        <label class="btn btn-default"><input type="radio" name="betTypeSelector" id="bt_free_bet_returned" value="optionSR"> Free Bet Stake Returned (SR)</label>
+                    }
+                    else
+                    {
+                        <label class="btn btn-default active"><input type="radio" name="betTypeSelector" id="bt_normal_qual" checked value="optionQualifier"> Normal Qualifier</label>
+                        <label class="btn btn-default"><input type="radio" name="betTypeSelector" id="bt_free_no_return" value="optionSNR"> Free Bet Stake Not Returned (SNR)</label>
+                        <label class="btn btn-default"><input type="radio" name="betTypeSelector" id="bt_free_bet_returned" value="optionSR"> Free Bet Stake Returned (SR)</label>
+                    }
                 </div>
             </div>
-            <div class="col-sm-6 col-md-3 text-center" style="margin-bottom: 10px;">
+            <div class="col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-3 text-center m-b-10">
                 <div class="input-group input-group-sm">
                     <span class="input-group-addon" id="stake_amount">Stake Amount =</span>
                     <input type="text" class="form-control" id="stake_amount_val" name="stake_amount_val" aria-describedby="stake_amount" onkeyup="ODDS_NS.inlineCalculate();" placeholder="10.00" pattern="^\d*(\.\d{2}$)?">
@@ -35,20 +50,25 @@
                 </div>
             </div>*@
         </div>
-        <div class="row m-t-12">
-            <div class="col-md-10">
-                <div class="input-group input-group-sm">
-                    <!-- (with a at on the front) onchange="ODDS_NS.submitOldFilterForm(this);" -->
-                    <span class="old-filters">@Html.DropDownList("SearchByBookmaker", null, "All Bookmakers", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })</span>
-                    <span class="old-filters">@Html.DropDownList("SearchByMarketType", null, "All Markets", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })</span>
-                    <span class="old-filters">@Html.DropDownList("SearchByBack", null, "All Back Odds", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })</span>
-                    <span class="old-filters">@Html.DropDownList("SearchByLay", null, "All Lay Odds", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })</span>
-                    <span class="old-filters">@Html.DropDownList("SearchBySize", null, "All Availability", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })</span>
-                </div>
+        <div class="row m-b-10">
+            <div class="col-md-2 col-md-offset-1 text-center">
+                @Html.DropDownList("SearchByBookmaker", null, "All Bookmakers", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })
+            </div>
+            <div class="col-md-2 text-center">
+                @Html.DropDownList("SearchByMarketType", null, "All Markets", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })
+            </div>
+            <div class="col-md-2 text-center">
+                @Html.DropDownList("SearchByBack", null, "All Back Odds", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })
+            </div>
+            <div class="col-md-2 text-center">
+                @Html.DropDownList("SearchByLay", null, "All Lay Odds", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })
+            </div>
+            <div class="col-md-2 text-center">
+                @Html.DropDownList("SearchBySize", null, "All Availability", new { @class = "form-control input-sm", @onchange = "ODDS_NS.submitOldFilterForm(this);" })
             </div>
         </div>
-        <div class="row m-t-12">
-            <div class="col-sm-7 col-md-7">
+        <div class="row">
+            <div class="col-sm-9 col-md-9">
                 <div class="input-group">
                     <span class="input-group-addon" id="search-addon"><span class="fa fa-search"></span></span>
 
@@ -63,13 +83,13 @@
                 </div>
             </div>
             <div class="col-md-1">
+                <button type="button" class="btn btn-default btn-sm" onclick="ODDS_NS.submitClearFilterForm(this);"><span class="fa fa-minus-circle"></span> Clear</button>
             </div>
-           <div class="col-sm-2 col-md-2">
-                <button type="button" class="btn btn-primary" onclick="ODDS_NS.submitFilterForm(this);"><span class="fa fa-check"></span> Apply</button>
-                @*<button type="button" class="btn btn-default" onclick="ODDS_NS.submitClearFilterForm(this);"><span class="fa fa-minus-circle"></span> Clear</button>*@
+            <div class="col-md-1">
+                <button type="button" class="btn btn-danger btn-sm" onclick="ODDS_NS.refreshPage()"><span class="fa fa-refresh"></span> Refresh</button>
             </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-danger btn-sm pull-right m-l-10" onclick="ODDS_NS.refreshPage()"><span class="fa fa-refresh"></span> Refresh</button>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-primary btn-sm" onclick="ODDS_NS.submitFilterForm(this);"><span class="fa fa-check"></span> Apply</button>
             </div>
         </div>
 
