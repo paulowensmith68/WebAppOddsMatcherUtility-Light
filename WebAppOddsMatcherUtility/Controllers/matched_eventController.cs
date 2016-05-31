@@ -36,9 +36,10 @@ namespace WebAppOddsMatcherUtility.Controllers
             ViewBag.MarketTypeFilter = searchByMarketType;
             ViewBag.BackFilter = searchByBack;
             ViewBag.SizeFilter = searchByLay;
-            ViewBag.SizeFilter = searchBySize;
+            ViewBag.SizeFilter = searchBySize; // TODO: confirm this is correct as searchByLay will never take effect because it will always be overwritten by this line!!
             ViewBag.filterSearchText = filterSearchText;
-            ViewBag.betTypeSelector = betTypeSelector;
+
+            ViewBag.betTypeSelector = String.IsNullOrEmpty(betTypeSelector) ? "optionQualifier" : betTypeSelector;
 
             if (searchByBookmaker == null)
             {

@@ -281,7 +281,8 @@
                                             data-bookmaker-name="@Html.DisplayFor(modelItem => item.bookmaker_name)"
                                             data-exchange-name="Betfair Exchange"
                                             data-market-name="@Html.DisplayFor(modelItem => item.marketName)"
-                                            data-bet-name="@Html.DisplayFor(modelItem => item.betName)">
+                                            data-bet-name="@Html.DisplayFor(modelItem => item.betName)"
+                                            data-bet-type="@ViewBag.betTypeSelector">
                                         <span class="fa fa-calculator fa-lg"></span>
                                     </button>
                                 </td>
@@ -294,7 +295,7 @@
                 <div id='Paging' class="text-center">
                     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText }))
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText, betTypeSelector = ViewBag.betTypeSelector }))
                 </div>
 
             </div>

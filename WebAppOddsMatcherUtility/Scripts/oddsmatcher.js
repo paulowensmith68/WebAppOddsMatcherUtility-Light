@@ -70,7 +70,7 @@ ODDS_NS.init = function()
     //});
 
     // change handler for the bet type radio buttons
-    $('input[name="betTypeSelector"]').on('change', ODDS_NS.inlineCalculate);
+    $('input[name="betTypeSelector"]').on('change', ODDS_NS.betTypeFilter);
 
     // call inline calculator with preset values
     ODDS_NS.inlineCalculate();
@@ -127,6 +127,10 @@ ODDS_NS.refreshPage = function() {
     location.reload();
 }
 
+ODDS_NS.betTypeFilter = function () {
+    document.getElementById("frm_filter").submit();
+}
+
 ODDS_NS.inlineCalculate = function( event )
 {
     // get the stake value, default it to 10.00 if the field is cleared
@@ -142,7 +146,6 @@ ODDS_NS.inlineCalculate = function( event )
     
     ODDS_NS.g_betType = document.querySelector('input[name="betTypeSelector"]:checked').value;
     $('#odds_table > tbody > tr').each( ODDS_NS.calc );
-        
 }
 
 ODDS_NS.calc = function( i, row )
@@ -305,50 +308,53 @@ ODDS_NS.clearModalCalculatorData = function( e ) {
 
 ODDS_NS.calculatorModalInit = function( event ) {
     // Set-up variables from modal screen
-    var button = $(event.relatedTarget) // Button that triggered the modal
-    var scriptEvent = button.data('event')
-    var scriptEventDate = button.data('event-date')
-    var scriptStake = button.data('stake')
-    var scriptOdds = button.data('back-odds')
-    var scriptComm = button.data('back-comm')
-    var scriptBookmakerName = button.data('bookmaker-name')
-    var scriptLayOdds = button.data('lay-odds')
-    var scriptLayComm = button.data('lay-comm')
-    var scriptExchangeName = button.data('exchange-name')
-    var scriptMarketName = button.data('market-name')
-    var scriptBetName = button.data('bet-name')
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    
+    var scriptBetType = button.data('bet-type');
+    var scriptEvent = button.data('event');
+    var scriptEventDate = button.data('event-date');
+    var scriptOdds = button.data('back-odds');
+    var scriptComm = button.data('back-comm');
+    var scriptBookmakerName = button.data('bookmaker-name');
+    var scriptLayOdds = button.data('lay-odds');
+    var scriptLayComm = button.data('lay-comm');
+    var scriptExchangeName = button.data('exchange-name');
+    var scriptMarketName = button.data('market-name');
+    var scriptBetName = button.data('bet-name');
 
-    var modal = $(this)
-    modal.find('.modal-body #event-name').val(scriptEvent)
-    modal.find('.modal-body #textareaID').val(scriptEvent)
-    modal.find('.modal-body #event-date').val(scriptEventDate)
-    modal.find('.modal-body #stake').val(scriptStake)
-    modal.find('.modal-body #back-odds').val(scriptOdds)
-    modal.find('.modal-body #back-comm').val(scriptComm)
-    modal.find('.modal-body #bookmaker-name').val(scriptBookmakerName)
-    modal.find('.modal-body #lay-odds').val(scriptLayOdds)
-    modal.find('.modal-body #lay-comm').val(scriptLayComm)
-    modal.find('.modal-body #exchange-name').val(scriptExchangeName)
-    modal.find('.modal-body #market-name').val(scriptMarketName)
-    modal.find('.modal-body #bet-name').val(scriptBetName)
+    var modal = $(this);
+
+    modal.find('.modal-body #stake').val( ODDS_NS.g_stake ); // use the global variable holding the stake amount from the in-line form
+
+    modal.find('.modal-body input:radio[name=inlineRadioOptions]').val([scriptBetType]); // could use the global variable but we are now getting the bet-type from the server, its on the button so just use that value
+
+    modal.find('.modal-body #event-name').val(scriptEvent);
+    modal.find('.modal-body #textareaID').val(scriptEvent);
+    modal.find('.modal-body #event-date').val(scriptEventDate);
+    modal.find('.modal-body #back-odds').val(scriptOdds);
+    modal.find('.modal-body #back-comm').val(scriptComm);
+    modal.find('.modal-body #bookmaker-name').val(scriptBookmakerName);
+    modal.find('.modal-body #lay-odds').val(scriptLayOdds);
+    modal.find('.modal-body #lay-comm').val(scriptLayComm);
+    modal.find('.modal-body #exchange-name').val(scriptExchangeName);
+    modal.find('.modal-body #market-name').val(scriptMarketName);
+    modal.find('.modal-body #bet-name').val(scriptBetName);
 
     // Set blank values for calculated fields
-    modal.find('.modal-body #lay-amount').val('')
-    modal.find('.modal-body #liability-amount').val('')
-    modal.find('.modal-body #bookie-win-bbal').val('')
-    modal.find('.modal-body #bookie-win-xbal').val('')
-    modal.find('.modal-body #bookie-win-profit').val('')
-    modal.find('.modal-body #exchange-win-bbal').val('')
-    modal.find('.modal-body #exchange-win-xbal').val('')
-    modal.find('.modal-body #exchange-win-profit').val('')
-
-
-    // Select "Qualifier" radio button
-    $('#inlineRadioQualifier').prop('checked', true);
+    modal.find('.modal-body #lay-amount').val('');
+    modal.find('.modal-body #liability-amount').val('');
+    modal.find('.modal-body #bookie-win-bbal').val('');
+    modal.find('.modal-body #bookie-win-xbal').val('');
+    modal.find('.modal-body #bookie-win-profit').val('');
+    modal.find('.modal-body #exchange-win-bbal').val('');
+    modal.find('.modal-body #exchange-win-xbal').val('');
+    modal.find('.modal-body #exchange-win-profit').val('');
 
     // Set focus to
     $('#stake').focus();
 
+    // As we are now using bet type and stake values from the main form call calculate for these current settings.
+    ODDS_NS.modalCalculate(this);
 }
 
 ODDS_NS.modalCalculate = function( event )
