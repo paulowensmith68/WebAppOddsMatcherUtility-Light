@@ -127,7 +127,12 @@ ODDS_NS.refreshPage = function() {
     location.reload();
 }
 
+//TODO: these functions that post the form off need looking at
 ODDS_NS.betTypeFilter = function () {
+    document.getElementById("frm_filter").submit();
+}
+//TODO: these functions that post the form off need looking at ESPECIALLY this one, there is an onBlur and onChange on the same field, this is fired from onblur probably need to deactivate other controls
+ODDS_NS.amountFilter = function () {
     document.getElementById("frm_filter").submit();
 }
 

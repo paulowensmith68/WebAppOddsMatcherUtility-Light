@@ -40,7 +40,7 @@
             <div class="col-sm-offset-3 col-sm-6 col-md-offset-3 col-md-3 text-center m-b-10">
                 <div class="input-group input-group-sm">
                     <span class="input-group-addon" id="stake_amount">Stake Amount =</span>
-                    <input type="text" class="form-control" id="stake_amount_val" name="stake_amount_val" aria-describedby="stake_amount" onkeyup="ODDS_NS.inlineCalculate();" placeholder="10.00" pattern="^\d*(\.\d{2}$)?">
+                    <input type="text" class="form-control" id="stake_amount_val" name="stakeAmount" aria-describedby="stake_amount" onkeyup="ODDS_NS.inlineCalculate();" onblur="ODDS_NS.amountFilter();" placeholder="10.00" pattern="^\d*(\.\d{2}$)?" value="@ViewBag.stakeAmount">
                 </div>
             </div>
             @*<div class="col-sm-6 col-md-3 text-center" style="margin-bottom: 10px;">
@@ -295,7 +295,7 @@
                 <div id='Paging' class="text-center">
                     Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText, betTypeSelector = ViewBag.betTypeSelector }))
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText, betTypeSelector = ViewBag.betTypeSelector, stakeAmount = ViewBag.stakeAmount }))
                 </div>
 
             </div>
