@@ -35,7 +35,7 @@ namespace WebAppOddsMatcherUtility.Controllers
             ViewBag.CurrentFilter = searchByBookmaker;
             ViewBag.MarketTypeFilter = searchByMarketType;
             ViewBag.BackFilter = searchByBack;
-            ViewBag.SizeFilter = searchByLay;
+            ViewBag.LayFilter = searchByLay;
             ViewBag.SizeFilter = searchBySize; // TODO: confirm this is correct as searchByLay will never take effect because it will always be overwritten by this line!!
             ViewBag.filterSearchText = filterSearchText;
 
@@ -56,7 +56,7 @@ namespace WebAppOddsMatcherUtility.Controllers
 
             var matched = (from s in db.matched_event
                            orderby s.rating descending
-                           select s).Take(10000);
+                           select s).Take(30000);
 
             //
             // Filter

@@ -111,37 +111,37 @@
                     <thead>
                         <tr>
                             <th>
-                                @Html.ActionLink("Event Date", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
+                                @Html.ActionLink("Event Date", "Index", new { sortOrder = ViewBag.DateSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText, betTypeSelector = ViewBag.betTypeSelector, stakeAmount = ViewBag.stakeAmount })
                             </th>
                             <th>
                                 Sport
                             </th>
                             <th>
-                                @Html.ActionLink("Details", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
+                                @Html.ActionLink("Details", "Index", new { sortOrder = ViewBag.DetailsSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
                             </th>
                             <th>
-                                @Html.ActionLink("Bet", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
+                                @Html.ActionLink("Bet", "Index", new { sortOrder = ViewBag.BetSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
                             </th>
                             <th>
-                                @Html.ActionLink("Market", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
+                                @Html.ActionLink("Market", "Index", new { sortOrder = ViewBag.MarketSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
                             </th>
                             <th>
-                                @Html.ActionLink("Rating", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
-                            </th>
-                            <th>
-                                <div class="split-hcell">
-                                    @Html.ActionLink("Bookmaker", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
-                                </div>
-                                <div>
-                                    @Html.ActionLink("Exchange", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
-                                </div>
+                                @Html.ActionLink("Rating", "Index", new { sortOrder = ViewBag.RatingSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
                             </th>
                             <th>
                                 <div class="split-hcell">
-                                    @Html.ActionLink("Back", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
+                                    @Html.ActionLink("Bookmaker", "Index", new { sortOrder = ViewBag.BookmakerSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
                                 </div>
                                 <div>
-                                    @Html.ActionLink("Lay", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
+                                    @Html.ActionLink("Exchange", "Index", new { sortOrder = ViewBag.ExchangeSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
+                                </div>
+                            </th>
+                            <th>
+                                <div class="split-hcell">
+                                    @Html.ActionLink("Back", "Index", new { sortOrder = ViewBag.BackSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
+                                </div>
+                                <div>
+                                    @Html.ActionLink("Lay", "Index", new { sortOrder = ViewBag.LaySortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
                                 </div>
                             </th>
                             <th>
@@ -157,17 +157,8 @@
                                 Liability
                             </th>
                             <th>
-                                Available
+                                @Html.ActionLink("Available", "Index", new { sortOrder = ViewBag.SizeSortParm, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
                             </th>
-                            <!--<th>
-                                @Html.ActionLink("Back", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
-                            </th>
-                            <th>
-                                @Html.ActionLink("Lay", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
-                            </th>
-                            <th>
-                                @Html.ActionLink("Size", "Index", new { sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, searchByBookmaker = ViewBag.BookmakerFilter, searchByMarketType = ViewBag.MarketTypeFilter, searchByBack = ViewBag.BackFilter, searchByLay = ViewBag.LayFilter, searchBySize = ViewBag.SizeFilter, filterSearchText = ViewBag.filterSearchText })
-                            </th> -->
                             <th>
                                 Calc
                             </th>
